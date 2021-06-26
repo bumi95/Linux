@@ -17,13 +17,13 @@
 /*
  * You need to Declare functions in  here
  */
-typedef struct {
-	char p_name;
-	int cpu_t, arri_t, p_priority;
+typedef struct { // 프로세스를 나타낼 구조체
+	char p_name; // 프로세스 이름 (A ~ E)
+	int cpu_t, arri_t, p_priority; // 수행 시간, 도착 시간, 우선 순위
 }my_proc;
 
-typedef struct {
-	my_proc RQ[6];
+typedef struct { // 레디 큐 구조체, 원형 큐로 구현
+	my_proc RQ[6]; // 레디 큐의 최대 크기는 6 (프로세스의 개수는 5개이고 full, empty 상태를 나타내야하기 때문)
 	my_proc *front;
 	my_proc *rear;
 }my_queue;
