@@ -35,14 +35,14 @@ CQ c_queue; // 차량 생산 큐 전역 변수로 선언(생산자, 소비자 �
 pthread_cond_t empty = PTHREAD_COND_INITIALIZER;
 pthread_cond_t fill = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-int count = 0; // 생산된  수(현재 시각)
+int count = 0; // 생산된 차량의 수(현재 시각)
 int time_quantum = 0; // 1 or 4
 int total_car = 0; // 100 or 1000 or 10000
 
 void RQ_init(RQ *r_queue) { // 레디 큐 생성자 함수
 	Node *node = malloc(sizeof(Node));
-    /* 원형 큐로 구현하기 때문에 큐가 비어있는 상태를 나타내기 위한
-       빈 노드 생성 (front와 rear가 같은 노드를 가리키면 큐는 비어있는 상태 */
+		/* 원형 큐로 구현하기 때문에 큐가 비어있는 상태를 나타내기 위한
+		   빈 노드 생성 (front와 rear가 같은 노드를 가리키면 큐는 비어있는 상태 */
 	node->next = NULL;
 	r_queue->front = r_queue->rear = node; // 초기 큐는 비어있는 상태
 }
@@ -73,7 +73,7 @@ int RQ_is_empty(RQ *r_queue) { // 레디 큐 empty case check
 }
 
 void CQ_init(CQ *c_queue) { // 차량 생산 큐 생성자 함수
-	c_queue->balance = 0; // 차량 수 0 개
+	c_queue->balance = 0; // 현재 차량 생산 큐에 있는 차량의 수 0 개
 	Node *temp = malloc(sizeof(Node));
 	temp->next = NULL;
 	c_queue->front = c_queue->rear = temp; // 레디 큐 생성자 함수와 동일(초기 큐는 비어있는 상태)
@@ -84,7 +84,7 @@ void CQ_insert(CQ *c_queue, Node node) { // 차량 생산 큐 삽입 함수
 	memcpy(temp, &node, sizeof(Node));
 	c_queue->front->next = temp;
 	c_queue->front = temp;
-    // 레디 큐 삽입 함수와 동일한 패턴
+		// 레디 큐 삽입 함수와 동일한 패턴
 	c_queue->balance++; // 생산 큐에 있는 차량의 수 1 증가
 }
 
@@ -93,7 +93,7 @@ void CQ_delete(CQ *c_queue, int n) { // 차량 생산 큐 삭제 함수
 		return; // 생산 큐 empty case 처리
   
 	if(c_queue->rear->next->car_num == n) {
-      // 삭제할 차량의 번호(이름)와 구매자의 이름이 같아야 삭제 수행
+			// 소비자가 구매할 수 있는 차량이어야만 구매(삭제) 수행
 		Node *temp = c_queue->rear;
 		c_queue->rear = temp->next;
 		c_queue->balance--; // 차량 수 1 감소
@@ -113,7 +113,8 @@ void *producer(void *arg) { // 생산자 차량 생산 함수, 전달 인자로 
 		int time_q=0; // time quantum 변수
 		if(car_n<5) { // 오버플로우 방지를 위한 조건
 			if(car[car_n].start_t == count) { // count는 차량 생산 수 및 현재 시간을 나타냄
-				RQ_insert(&r_queue, car[car_n]); // 해당 차량의 생산 시작 시간이 현재 시간과 같다면 레디 큐에 삽입하여 생산 시작
+				RQ_insert(&r_queue, car[car_n]); // 해당 차량의 생산 시작 시간이 현재 시간과 같다면
+								// 레디 큐에 삽입하여 생산 시작
 				car_n++;
 			}
 		}
@@ -121,7 +122,7 @@ void *producer(void *arg) { // 생산자 차량 생산 함수, 전달 인자로 
 			break; // 레디 큐가 비어있다면 차량 생산이 모두 종료된 것이므로 생산 종료
 		}
 		Node ret_node = RQ_delete(&r_queue);
-      // 차량 생산 큐에 삽입하기 위해 레디 큐에서 삭제 수행
+			// 차량 생산 큐에 삽입하기 위해 레디 큐에서 삭제 수행
 		while(ret_node.prod_num>0) { // 생산량 만큼 반복
 			if(car_n<5) { // 오버플로우 방지를 위한 조건
 				if(car[car_n].start_t == count) {
@@ -132,7 +133,7 @@ void *producer(void *arg) { // 생산자 차량 생산 함수, 전달 인자로 
 			if(RQ_is_empty(&r_queue)==0 && time_q>=time_quantum) {
 				RQ_insert(&r_queue, ret_node);
 				break; // 레디 큐에 차량(노드)이 존재하고 현재 time quantum이 1(or 4) 이상이면
-               // 현재 차량을 레디 큐의 마지막에 다시 추가하고 대기중인 다음 차량 생산 시작
+					// 현재 차량을 레디 큐의 마지막에 다시 추가하고 대기중인 다음 차량 생산 시작
 			}
 			pthread_mutex_lock(&lock); // 차량 생산 큐의 full case 처리를 위한 lock
 			while(c_queue.balance == 10) {
@@ -156,9 +157,8 @@ void *consumer(void *arg) { // 소비자 차량 구매 함수, 전달 인자로 
 		}
 		pthread_cond_signal(&empty); // 생산자를 깨움
 		pthread_mutex_unlock(&lock);
-		if(strcmp((char *)arg, "C_a")==0) { // 소비자 이름과 차량의 이름을 비교
-			CQ_delete(&c_queue, 0);
-        // 소비자 C_a는 차량 번호 0번만 구매 가능
+		if(strcmp((char *)arg, "C_a")==0) { // 전달 인자로 받은 문자열과 소비자 이름을 비교
+			CQ_delete(&c_queue, 0); // 소비자 C_a는 차량 번호 0번만 구매 가능
 		}
 		else if(strcmp((char *)arg, "C_b")==0) {
 			CQ_delete(&c_queue, 1);
