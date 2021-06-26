@@ -107,7 +107,7 @@ for (top, right, bottom, left), name in zip(face_locations, face_names):
 * 다양한 얼굴 데이터 셋을 만들고 적용하지 못해 개인의 얼굴 사진을 이용
 * 여러 센서를 구비하지 못하여 경고음을 울리거나 진동이 울리는 알람을 구현하지 못함
 * * *
-프로세스 스케줄링 시뮬레이터 구현
+[프로세스 스케줄링 시뮬레이터 구현](https://github.com/bumi95/Linux/tree/main/C/process_scheduling)
 =================================
 
 
