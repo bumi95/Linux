@@ -4,7 +4,7 @@
 *	    Student id : 32141925
 *	    Student name : Park Jong Bum
 *
-*   lab1_sched.c :
+*   lab1_sched_test.c :
 *       - Lab1 source file.
 *       - Must contains scueduler algorithm test code.
 *
