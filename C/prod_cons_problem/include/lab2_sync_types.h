@@ -32,19 +32,19 @@
  * You need to Declare functions in  here
  */
 
-typedef struct Node {
-	int car_num;
-	int start_t, prod_num;
-	struct Node *next;
+typedef struct Node { // 차량 노드 구조체
+	int car_num; // 차량 번호(0 ~ 4)
+	int start_t, prod_num; // 생산 시작 시간과 차량 생산 수
+	struct Node *next; // 다음 노드를 가리킬 포인터
 }Node;
 
-typedef struct ready_queue {
-	Node *front, *rear;
+typedef struct ready_queue { // 레디 큐 구조체
+	Node *front, *rear; // 원형 큐로 구현하기 위한 포인터 두 개
 }RQ;
 
-typedef struct car_queue {
-	int balance;
-	Node *front, *rear;
+typedef struct car_queue { // 차량 생산 큐 구조체
+	int balance; // 차량 생산 큐에 들어있는 차량의 수
+	Node *front, *rear; // 원형 큐로 구현하기 위한 포인터 두 개
 }CQ;
 
 void RQ_init(RQ *r_queue);
@@ -60,5 +60,3 @@ void *producer(void *arg);
 void *consumer(void *arg);
 
 #endif /* LAB2_HEADER_H*/
-
-
