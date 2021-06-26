@@ -150,7 +150,7 @@ void *producer(void *arg) { // 생산자 차량 생산 함수, 전달 인자로 
 }
 
 void *consumer(void *arg) { // 소비자 차량 구매 함수, 전달 인자로 소비자 이름을 받음(문자열)
-	while(count<total_car) { // 차량 생산이 끝나면 수행 종료
+	while(count<total_car) { // 모든 차량에 대한 생산이 끝나면 수행 종료
 		pthread_mutex_lock(&lock); // 차량 생산 큐의 empty case를 처리하기 위한 lock
 		while(c_queue.balance == 0) {
 			pthread_cond_wait(&fill, &lock);
