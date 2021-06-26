@@ -82,22 +82,29 @@ void CQ_init(CQ *c_queue) { // 차량 생산 큐 생성자 함수
 void CQ_insert(CQ *c_queue, Node node) { // 차량 생산 큐 삽입 함수
 	Node *temp = malloc(sizeof(Node));
 	memcpy(temp, &node, sizeof(Node));
+	
+	pthread_mutex_lock(&lock);
 	c_queue->front->next = temp;
 	c_queue->front = temp;
 		// 레디 큐 삽입 함수와 동일한 패턴
 	c_queue->balance++; // 차량 생산 큐에 있는 차량의 수 1 증가
+	pthread_mutex_unlock(&lock);
 }
 
 void CQ_delete(CQ *c_queue, int n) { // 차량 생산 큐 삭제 함수
 	if(c_queue->rear->next->car_num == n) {
 			// 소비자가 구매할 수 있는 차량이어야만 구매(삭제) 수행
+		pthread_mutex_lock(&lock);
 		Node *temp = c_queue->rear;
 		c_queue->rear = temp->next;
 		c_queue->balance--; // 차량 생산 큐의 차량 수 1 감소
 		free(temp);
+		pthread_mutex_unlock(&lock);
 	}
 	else {
+		pthread_mutex_lock(&lock);
 		pthread_cond_wait(&fill, &lock); // 소비자가 구매할 수 없는 차량이면 해당 소비자 스레드는 sleep 상태 돌입
+		pthread_mutex_unlock(&lock);
 	}
 }
 
@@ -139,10 +146,11 @@ void *producer(void *arg) { // 생산자 차량 생산 함수, 전달 인자로 
 			while(c_queue.balance == 10) {
 				pthread_cond_wait(&empty, &lock);
 			}
-			CQ_insert(&c_queue, ret_node); // 차량을 차량 생산 큐에 삽입(출고)
-			count++; // 생산된 차량의 수(현재 시각) 1 증가
 			pthread_cond_broadcast(&fill); // 모든 소비자들을 깨우기 위해 broadcast 사용
 			pthread_mutex_unlock(&lock);
+			
+			CQ_insert(&c_queue, ret_node); // 차량을 차량 생산 큐에 삽입(출고)
+			count++; // 생산된 차량의 수(현재 시각) 1 증가
 			ret_node.prod_num--; // 해당 차량 재고 1 감소
 			time_q++; // time quantum 1 증가
 		}
@@ -155,6 +163,9 @@ void *consumer(void *arg) { // 소비자 차량 구매 함수, 전달 인자로 
 		while(c_queue.balance == 0) {
 			pthread_cond_wait(&fill, &lock);
 		}
+		pthread_cond_signal(&empty); // 생산자를 깨움
+		pthread_mutex_unlock(&lock);
+		
 		if(strcmp((char *)arg, "C_a")==0) { // 전달 인자로 받은 문자열과 소비자 이름을 비교
 			CQ_delete(&c_queue, 0); // 소비자 C_a는 차량 번호 0번만 구매 가능
 		}
@@ -173,8 +184,6 @@ void *consumer(void *arg) { // 소비자 차량 구매 함수, 전달 인자로 
 		else {
 			printf("error\n");
 		}
-		pthread_cond_signal(&empty); // 생산자를 깨움
-		pthread_mutex_unlock(&lock);
 	}
 }
 
@@ -237,7 +246,7 @@ int main(int argc, char* argv[]) { // 메인 함수
 	gettimeofday(&end, NULL);
 	result_t = (end.tv_sec - start.tv_sec) + ((end.tv_usec - start.tv_usec)/1000000); // 수행 시간 
 	
-	printf("Coarse-grained Experiment\n");
+	printf("Fine-grained Experiment\n");
 	printf("Total Produce Number : %d\n", count);
 	printf("Final Balance Value : %d\n", c_queue.balance);
 	printf("Execution Time : %f\n", result_t);
