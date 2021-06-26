@@ -10,6 +10,8 @@
 > 요구 조건
 * Jetson nano kit, CSI camera module, sensor
 ## 시스템 블록 다이어그램
+![block](https://user-images.githubusercontent.com/39798011/123509922-521c2b80-d6b3-11eb-8efe-4097f55a11e9.jpg)
+
 ## 수행 내용
 > 저는 얼굴 인식 코드 분석과 성능 개선 부분을 담당하였습니다.   
 > Jetson nano 보드에 연결한 카메라 모듈의 입력 값을 gstreamer_pipeline을 이용하여 전달 받습니다.   
