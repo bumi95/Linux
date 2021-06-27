@@ -32,7 +32,7 @@ void my_queue_init(my_queue *que);
 void my_queue_insert(my_queue *que, my_proc proc);
 my_proc my_queue_delete(my_queue *que);
 int my_queue_is_empty(my_queue *que);
-void SFJ_queue_sort(my_queue *que);
+void SJF_queue_sort(my_queue *que);
 int my_pow(int n, int m);
 void My_sort(my_proc *proc, int n);
 void My_FCFS(my_proc *proc, int n);
