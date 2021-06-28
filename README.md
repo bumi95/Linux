@@ -133,6 +133,7 @@ for (top, right, bottom, left), name in zip(face_locations, face_names):
     + 메인 함수에 프로세스들의 워크로드를 설정하고 각 스케줄링 알고리즘을 수행시킵니다.
 > 작성한 3개의 파일은 주어진 makefile을 이용하여 컴파일 합니다.
 ## 구현 및 결과
+### First Come First Served
 > 각 스케줄링 함수의 기본 구조는 비슷합니다.   
 > 아래의 코드는 FCFS 함수의 일부입니다.
 ```c
@@ -175,7 +176,8 @@ while(ret_proc.cpu_t>0) { // 수행 시간만큼 반복
 	count++; // 현재 시각 1 증가
 }
 ```
-> 위의 코드가 FCFS에서 프로세스가 수행되는 부분입니다.   
+> 위의 코드가 FCFS에서 프로세스가 수행되는 부분입니다.
+### Round Robin
 > 아래의 코드는 RR(time quantum=1)에서 프로세스가 수행되는 부분입니다.
 ```c
 while(ret_proc.cpu_t>0) {
@@ -197,7 +199,8 @@ while(ret_proc.cpu_t>0) {
 	time_q++; // time quantum 1 증가
 }
 ```
-> FCFS에서 time quantum을 확인하는 조건문이 추가 되었습니다.   
+> FCFS에서 time quantum을 확인하는 조건문이 추가 되었습니다.
+### Shortest Job First
 > 아래는 SJF 함수의 코드입니다.
 ```c
 SJF_queue_sort(&que); // 레디 큐에 있는 프로세스 중 수행 시간이 가장 짧은 프로세스 먼저 수행하기 위해
@@ -219,7 +222,8 @@ while(ret_proc.cpu_t>0) {
 >    
 > MLFQ 스케줄링 함수는 조금 다릅니다.   
 >    
-> 레디 큐를 multi level로 선언하여 각 레디 큐마다 우선 순위를 설정해야하기 때문입니다.   
+> 레디 큐를 multi level로 선언하여 각 레디 큐마다 우선 순위를 설정해야하기 때문입니다.
+### Multi Level Feedback Queue
 > 아래는 MLFQ 함수의 레디 큐 선언과 초기화 부분입니다.
 ```c
 my_queue que[5]; // 레디 큐를 5개의 레벨로 구성, que[0] 부터 que[5] 까지 갈수록 우선순위가 낮아짐
@@ -288,9 +292,7 @@ while(ret_proc.cpu_t>0) {
 }
 ```
 > time quantum을 확인하는 조건문과 프로세스의 우선 순위를 조정하는 조건문이 추가되었습니다.   
->    
-> 마지막으로 수행 결과입니다.   
->    
+### 
 > 워크로드는 아래와 같습니다.
 ```c
 my_proc proc[5] = { {'A', 3, 0, 0},
