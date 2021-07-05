@@ -46,3 +46,5 @@ Linux
 * Linux API
 > 성과
 * ext2 파일 시스템의 블록 그룹 구조에 대한 이해, superblock, descriptor와 inode 구조에 대한 이해
+
+# 5. LRU cache 시뮬레이터 구현 (진행중)
