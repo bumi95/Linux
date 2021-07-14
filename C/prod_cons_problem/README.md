@@ -101,7 +101,7 @@ if(strcmp((char *)arg, "C_a")==0) { // 전달 인자로 받은 문자열과 소�
 	CQ_delete(&c_queue, 0); // 소비자 C_a는 차량 번호 0번만 구매 가능
 }
 
-'''
+...
 
 else if(strcmp((char *)arg, "C_e")==0) {
 	CQ_delete(&c_queue, 4);
