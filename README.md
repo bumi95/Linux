@@ -1,50 +1,27 @@
-Linux
-=====
-> 리눅스 환경에서 수행하는 프로젝트 혹은 과제들을 기술합니다.   
-> 제목을 클릭하면 상세한 내용을 확인할 수 있습니다.
+# Linux 학습 레포지토리
 
-[1. 졸음 운전 방지 시스템 개발 프로젝트](https://github.com/bumi95/Linux/tree/main/Safe_driving_project)
-====================================
-> 내용
-* 운전자의 얼굴 인식을 통한 졸음 운전 판별
-> 개발 환경
-* Jetson nano, Ubuntu
-> 사용 기술
-* Python, OpenCV, Dlib, ZMQ 등
-> 성과
-* 얼굴 인식 원리에 대한 이해, pub/sub 통신 방식에 대한 이해
+이 레포지토리는 Linux와 관련된 학습 자료, 프로젝트, 코드를 문서화하고 정리하기 위해 만들어졌습니다. 파일 시스템, 프로세스 스케줄링, 동기화 문제 등 다양한 Linux 주제를 탐구하고 학습하는 중심 허브 역할을 합니다.
 
-[2. 프로세스 스케줄링 시뮬레이터 구현](https://github.com/bumi95/Linux/tree/main/C/process_scheduling)
-=================================
-> 내용
-* FCFS, SJF, RR, MLFQ 스케줄링 구현
-> 구현 환경
-* Virtual Box, Ubuntu
-> 사용 기술
-* C, Queue
-> 성과
-* 프로세스 스케줄링에 대한 이해
+## 레포지토리 구조
 
-[3. 생산자 소비자 문제 구현](https://github.com/bumi95/Linux/tree/main/C/prod_cons_problem)
-=========================
-> 내용
-* Concurrency Control을 통한 생산자 소비자 문제 해결
-> 구현 환경
-* Virtual Box, Ubuntu
-> 사용 기술
-* C, Queue, Thread API, Lock, Condition Variable
-> 성과
-* lock 유무에 따른 성능 차이 이해, 스레드 수의 변화에 따른 성능 차이 이해, 병행성 제어와 공유자원 및 임계영역에 대한 이해
+### Dankook
+Linux 개념과 관련된 다양한 프로젝트와 실습이 포함되어 있습니다:
 
-[4. Ext2 파일시스템 내부구조 분석](https://github.com/bumi95/Linux/tree/main/C/Ext2_file_system)
-===========================
-> 내용
-* Ram Disk를 통한 ext2 파일 시스템 구조 분석
-> 분석 환경
-* Virtual Box, Ubuntu
-> 사용 기술
-* Linux API
-> 성과
-* ext2 파일 시스템의 블록 그룹 구조에 대한 이해, superblock, descriptor와 inode 구조에 대한 이해
+- **Ext2_file_system**: Ext2 파일 시스템과 관련된 자료와 코드.
+- **process_scheduling**: 프로세스 스케줄링 실험 및 테스트를 위한 코드와 문서.
+- **prod_cons_problem**: 다양한 동기화 기법을 사용한 생산자-소비자 문제.
+- **Safe_driving_project**: 안전 운전에 관련된 프로젝트로, Python 스크립트와 보고서 포함.
 
-# 5. LRU cache 시뮬레이터 구현 (진행중)
+### study
+Linux 프로세스와 시스템 호출을 학습하기 위한 다양한 C 프로그램과 스크립트가 포함되어 있습니다:
+
+- `find_open_file_process.c`: 특정 파일을 열고 있는 프로세스를 찾는 프로그램.
+- `process_tree.c`: 프로세스 트리를 출력하는 프로그램.
+- `list_user_processes.c`: 특정 사용자에 의해 실행 중인 프로세스를 나열하는 프로그램.
+
+## 목적
+
+이 레포지토리의 목적은 다음과 같습니다:
+- Linux 개념 학습 여정을 문서화.
+- 다양한 Linux 관련 프로젝트와 실습에 대한 참고 자료 제공.
+- Linux에 관심 있는 사람들과 지식과 자료를 공유.
